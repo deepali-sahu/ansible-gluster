@@ -1,0 +1,52 @@
+---
+- host: all
+  become: yes
+  become_user: root
+
+  tasks:
+  - name: activate fuse in server
+    command: modprobe fuse
+    state: present
+
+  
+  - name: confirm if fuse activated
+    command: dmesg | grep -i fuse
+    register: abc
+
+  tasks: 
+  - name: start fuse again if not activated
+    command: modprobe fuse
+    when: "fuse" not in abc.stdout
+
+
+  tasks:
+  - name: install glusterfs and gluster-fuse
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items: ["glusterfs","glusterfs-fuse"]
+    update_cache: yes
+  
+   - name: Ensure GlusterFS daemon is enabled and running.
+     service:
+      name: ""
+      state: started
+      enabled: yes
+     with_items:
+      - glusterd
+
+    # create the directory before mounting the volume
+    - file:
+        path: "{{ gluster_mount_dir }}"
+        state: directory
+        mode: 0755
+
+    # Mount the volume on directory
+    - name: Mount Gluster volume
+      mount:
+        path: "{{ gluster_mount_dir}}"
+        src: "{{ mount_src }}"
+        fstype: glusterfs
+        state: mounted
+
+ 
