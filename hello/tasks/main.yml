@@ -1,2 +1,12 @@
 ---
 # tasks file for hello
+  - name: activate fuse
+   include: fuse.yml
+
+  - name: Install glusterfs client
+    include: client.yml
+    when: ansible_distribution == 'Redhat'
+
+  - name: Mount volume(s)
+    include: mount.yml
+    when: glusterfs_volumes
