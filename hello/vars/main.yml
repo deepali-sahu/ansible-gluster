@@ -1,2 +1,6 @@
 ---
 # vars file for hello
+---
+# vars file for hello
+gluster_mount_dir: /mnt/gluster/uk
+mount_src: ${gs_server_ip}:/gv0
