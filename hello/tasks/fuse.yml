@@ -1,0 +1,16 @@
+---
+
+  
+  - name: activate fuse in server
+    command: modprobe fuse
+    state: present
+
+  
+  - name: confirm if fuse activated
+    command: dmesg | grep -i fuse
+    register: abc
+
+   
+  - name: start fuse again if not activated
+    command: modprobe fuse
+    when: "fuse" not in abc.stdout
