@@ -1,2 +1,7 @@
 ---
 # defaults file for hello
+
+
+glusterfs_client_packages_EL:
+  - {package: "glusterfs"}
+  - {package: "glusterfs-fuse"}
