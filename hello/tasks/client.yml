@@ -1,0 +1,7 @@
+---
+
+- name: Install glusterfs
+  yum:
+    name: "{{ item.package }}"
+    state: present
+  with_items: "{{ glusterfs_client_packages_EL }}"
